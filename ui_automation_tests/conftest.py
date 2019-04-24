@@ -13,9 +13,10 @@ def pytest_exception_interact(node, report):
 
 # Create driver and url command line addoption
 def pytest_addoption(parser):
-    env = "uat"
+    env = str(os.environ.get('ENVIRONMENT'))
     parser.addoption("--driver", action="store", default="chrome", help="Type in browser type")
     parser.addoption("--url", action="store", default="https://lite-exporter-frontend-" + env + ".london.cloudapps.digital/", help="url")
+    parser.addoption("--local", action="store", default="http://localhost:9000/", help="url")
 
 
 # Create driver fixture that initiates chrome
@@ -23,7 +24,6 @@ def pytest_addoption(parser):
 def driver(request):
     browser = request.config.getoption("--driver")
     if browser == 'chrome':
-        print("touched")
         browser = webdriver.Chrome()
         browser.get("about:blank")
         browser.implicitly_wait(10)
@@ -35,4 +35,5 @@ def driver(request):
 # Create url fixture
 @pytest.fixture(scope="module")
 def url(request):
+    print("url: " + request.config.getoption("--url"))
     return request.config.getoption("--url")
