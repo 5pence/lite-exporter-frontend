@@ -24,7 +24,7 @@ pipeline {
             sh 'echo running'
             sh 'ls'
             sh 'python --version'
-            sh 'pytest'
+            sh 'python -m pytest'
             println "Result: Done"
           }
         }
